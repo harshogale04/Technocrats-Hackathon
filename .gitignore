@@ -1,0 +1,29 @@
+# Node dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Gmail OAuth tokens & credentials
+token.json
+credentials.json
+
+# Cache files
+cache.json
+
+# Logs
+*.log
+
+# Build files (if using React)
+client/node_modules/
+client/build/
+client/.env
+
+# System files
+.DS_Store
+Thumbs.db
+
+gemini.js
+listModels.js
+
+user_preferences.json

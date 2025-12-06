@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Email Inbox | AI-Powered Email Analysis</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon"></span>
+                <h1>Smart Email Inbox</h1>
+            </div>
+            <p class="tagline">AI-Powered Email Analysis</p>
+            <div class="header-actions">
+                <button id="refreshBtn" class="btn btn--refresh">
+                    Refresh
+                </button>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid">
+                        <span>⊞</span> Grid
+                    </button>
+                    <button class="view-btn" data-view="list">
+                        <span>☰</span> List
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- NEW: Agentic Query Section -->
+        <section class="agentic-query-section">
+            <div class="query-card">
+                <div class="query-header">
+                    <h3> Ask Your Email Agent</h3>
+                    <p class="query-hint">Example: "Find all emails mentioning deadlines this week and add them as events"</p>
+                </div>
+                <div class="query-input-group">
+                    <input 
+                        type="text" 
+                        id="agenticQuery" 
+                        class="query-input" 
+                        placeholder="What would you like me to do with your emails?"
+                    >
+                    <button id="executeQueryBtn" class="btn btn--primary">
+                        Execute
+                    </button>
+                </div>
+                <div id="queryResults" class="query-results"></div>
+            </div>
+        </section>
+
+        <div class="filter-section">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">
+                    <span class="filter-icon"></span> All Emails
+                </button>
+                <button class="filter-btn" data-filter="work priority">
+                    <span class="filter-icon"></span> High Priority
+                </button>
+                <button class="filter-btn" data-filter="medium priority">
+                    <span class="filter-icon"></span> Medium
+                </button>
+                <button class="filter-btn" data-filter="low priority">
+                    <span class="filter-icon"></span> Low
+                </button>
+                <button class="filter-btn" data-filter="promotions">
+                    <span class="filter-icon"></span> Promotions
+                </button>
+            </div>
+            <div class="search-box">
+                <input type="text" placeholder="Search emails..." class="search-input">
+            </div>
+        </div>
+
+        <div id="emailContainer" class="email-grid">
+            <!-- Emails will be dynamically loaded here -->
+        </div>
+
+        <!-- Enhanced Email Modal with NEW Agentic Features -->
+        <div id="emailModal" class="modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalSubject" class="modal-title"></h2>
+                    <button class="modal-close" id="closeModal">×</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="email-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">From:</span>
+                            <span id="modalFrom" class="meta-value"></span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Date:</span>
+                            <span id="modalDate" class="meta-value"></span>
+                        </div>
+                        <div class="email-badges">
+                            <span id="modalCategory" class="badge"></span>
+                            <span id="modalUrgency" class="badge"></span>
+                        </div>
+                    </div>
+
+                    <div class="email-summary-box">
+                        <h4 class="section-title"> AI Summary</h4>
+                        <p id="modalSummary" class="summary-text"></p>
+                    </div>
+
+                    <div id="modalActionsSection" class="actions-section" style="display: none;">
+                        <h4 class="section-title">Actions Needed</h4>
+                        <ul id="modalActionsList" class="actions-list"></ul>
+                    </div>
+
+                    <div class="email-body-section">
+                        <h4 class="section-title">Email Content</h4>
+                        <div id="modalBody" class="email-body-content"></div>
+                    </div>
+
+                    <!-- NEW: Action Buttons for Agentic Features -->
+                    <div class="modal-action-buttons">
+                        <button id="smartReplyBtn" class="btn btn--primary">
+                             Smart Reply
+                        </button>
+                        <button id="summarizeThreadBtn" class="btn btn--secondary">
+                             Summarize Thread
+                        </button>
+                        <button id="addToCalendarBtn" class="btn btn--accent">
+                             Add to Calendar
+                        </button>
+                    </div>
+
+                    <!-- NEW: Smart Reply Section -->
+                    <div id="smartReplySection" class="smart-reply-container" style="display: none;">
+                        <h4 class="section-title"> Smart Reply Options</h4>
+                        <div class="reply-options">
+                            <div class="reply-option">
+                                <div class="reply-header">
+                                    <h5>Quick Acknowledgment</h5>
+                                    <button class="btn btn--sm use-reply-btn" data-reply-type="quick">Use This</button>
+                                </div>
+                                <p id="replyQuick" class="reply-text"></p>
+                            </div>
+                            <div class="reply-option">
+                                <div class="reply-header">
+                                    <h5>Detailed Response</h5>
+                                    <button class="btn btn--sm use-reply-btn" data-reply-type="detailed">Use This</button>
+                                </div>
+                                <p id="replyDetailed" class="reply-text"></p>
+                            </div>
+                            <div class="reply-option">
+                                <div class="reply-header">
+                                    <h5>Action-Oriented</h5>
+                                    <button class="btn btn--sm use-reply-btn" data-reply-type="action">Use This</button>
+                                </div>
+                                <p id="replyAction" class="reply-text"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="reply-editor-section">
+                            <h5>Edit & Send Reply</h5>
+                            <textarea id="replyEditor" class="reply-editor" rows="6" placeholder="Edit your reply here..."></textarea>
+                            <div class="editor-actions">
+                                <button id="sendReplyBtn" class="btn btn--primary">Send Reply</button>
+                                <button id="cancelReplyBtn" class="btn btn--secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NEW: Thread Summary Section -->
+                    <div id="threadSummarySection" class="thread-summary-container" style="display: none;">
+                        <h4 class="section-title">🧵 Thread Summary</h4>
+                        <div id="threadSummaryContent" class="thread-summary-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p id="loadingText" class="loading-text">Processing...</p>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
