@@ -1,5 +1,5 @@
 # 📧 Email Inbox Agent (with Chrome Extension + Gmail Integration)
-https://youtu.be/DX_PpcRTPGA?si=Y5fO3dkCyhc9FeHf
+https://youtu.be/so4laQaKBAA?si=wVbpJATcmJmNW2t2
 
 ### 🧠 Overview
 
